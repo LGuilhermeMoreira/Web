@@ -9,7 +9,7 @@ const TelaPrincipal = () => {
     <>
       <table>
         <tbody>
-          <tr>
+          <tr style={{backgroundColor: "gray"}}>
             <td>
               <Image />
             </td>
@@ -17,7 +17,7 @@ const TelaPrincipal = () => {
               <ImageBack />
             </td>
           </tr>
-          <tr>
+          <tr style={{backgroundColor: "pink"}}> 
             <td>
               <BotaoDecrementar />
             </td>

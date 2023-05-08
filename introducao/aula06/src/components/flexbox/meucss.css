@@ -1,0 +1,68 @@
+.box-row{
+    /*padrão do box é row*/
+    display: flex;
+    flex-direction: row;
+    border: 1px solid red;
+}
+
+.box-row-reverse{
+    display: flex;
+    flex-direction: row-reverse;
+    border: 1px solid red;
+}
+
+.box-column{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+    height: 100px;
+}
+
+
+.box-column-reverse{
+    display: flex;
+    flex-direction: column-reverse;
+    border: 1px solid red;
+    height: 100px;
+}
+
+.box-wrap-row{
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid red;
+}
+
+
+.box-wrap-column{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: 1px solid red;
+    height: 100px;
+}
+
+.box-flex-flow{
+    display: flex;
+    flex-flow: column wrap;
+    border: 1px solid red;
+}
+
+.box-flex{
+    display: flex;
+}
+
+.item{
+    border: 1px solid black;
+}
+
+.item-one{
+    flex: 1;
+}
+
+.item-two{
+    flex: 2;
+}
+
+.item-three{
+    flex: 3;
+}

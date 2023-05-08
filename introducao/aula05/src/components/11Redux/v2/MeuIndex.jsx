@@ -5,7 +5,7 @@ import { Provider } from "react-redux"
 const MeuIndex = () =>
 <>
     <Provider store={store}>
-    <TelaPrincipal />
+    <TelaPrincipal style = {{backgroundColor: "grey"}}/>
     </Provider>
 </>
 

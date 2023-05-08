@@ -28,9 +28,10 @@ const MeuGet = (url) => {
 
 const MinhaPromise = () => {
     useEffect(
-        () =>{MeuGet("https://fake")
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error))
+        () =>{
+        MeuGet("https://fake")
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error))
     }, []
     )
 
