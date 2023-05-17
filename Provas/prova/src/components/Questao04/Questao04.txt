@@ -1,0 +1,81 @@
+Supondo a situação em que temos os componentes CA, CB, CC, CD, CF... e 
+cada componente chama o próximo na hierarquia (CA chama CB, CB chama CC, e assim por diante).
+
+Se eu quiser passar uma propriedade que será usada apenas em CA e CF, e estou utilizando props, 
+então todos os outros componentes terão que passar essa propriedade para o próximo componente no seu jsx, 
+o que causa o problema conhecido como "props drilling".No entanto, o uso de Contexto resolve esse problema, 
+permitindo que a propriedade seja fornecida por um Provider no componente pai, que a disponibilizará para toda a 
+hierarquia de componentes. Quem precisar utilizar essa propriedade em si poderá acessá-la por meio do consumer.
+
+
+
+// CÓDIGO 
+
+-- COM props
+
+Component A (){
+    Cor = "red"
+
+    <> 
+        <h1 cor : Cor>Component A</h1>
+        <Component B cor = Cor/>
+    </>
+}
+
+Component B (props){
+
+    <>
+        <h1>Component B</h1>
+        <Component C cor = props.cor/>
+    </>
+}
+
+Component C (props){
+    <> 
+        <h1 cor : props.cor>Component C</h1>
+    </>
+}
+
+/*
+    Mesmo sem utilizar a propriedade, o componente B teve que receber ela para passar para o componente C (props drilling)
+*/
+
+
+
+-- COM Contexto
+
+MyContext(){
+    Cor cor = createContext()
+}
+
+Component A (){
+    Cor = "red"
+
+    <MyContext.Provider value = Cor>
+        <>
+            <h1 cor = Cor>Component A</h1>
+            <Component B/>
+        </>
+    </MyContext.Provider>
+}
+
+Component B (props){
+
+    <>
+        <h1>Component B</h1>
+        <Component C/>
+    </>
+}
+
+Component C (props){
+    <MyContext.Consumer>
+        {(Cor) => {
+            <h1 cor = Cor>Component C</h1> 
+        }}
+    </MyContext.Consumer>
+}
+
+/*
+os componentes que não utulizam o Contexto não precisam passar props ou fazer nada como o Component B 
+que so chama o Component C
+*/
