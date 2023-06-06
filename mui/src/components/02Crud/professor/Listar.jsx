@@ -5,6 +5,8 @@ import { tableCellClasses } from '@mui/material/TableCell'
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -37,12 +39,24 @@ const Listar = () => {
     }
 
 
-    const professores = [
-        {id: 0,nome: "Kaynan Cavalo", curso: "CC", titulacao: "GRAD"},
-        {id: 1,nome: "Thigas", curso: "EC", titulacao: "MEST"},
-        {id: 2,nome: "Titilio", curso: "CC", titulacao: "DOUT"},
-        {id: 3,nome: "Vivi", curso: "CC", titulacao: "DOUT"},
-    ]
+    // const professores = [
+    //     {id: 0,nome: "Kaynan Cavalo", curso: "CC", titulacao: "GRAD"},
+    //     {id: 1,nome: "Thigas", curso: "EC", titulacao: "MEST"},
+    //     {id: 2,nome: "Titilio", curso: "CC", titulacao: "DOUT"},
+    //     {id: 3,nome: "Vivi", curso: "CC", titulacao: "DOUT"},
+    // ]
+
+    const [professores,setProfessores] = useState([]);
+
+    useEffect(()=>{
+        // pego os dados do servidor
+        // seto no variavel de estado professores
+        axios.get("http://localhost:3001/professores/listar").then(
+            response => {
+                setProfessores(response.data)
+            }
+        ).catch(error => console.log(error))
+    },[])
 
     return (
         <>

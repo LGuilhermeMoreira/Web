@@ -1,52 +1,62 @@
-import { TextField, Typography, Box, FormControl, InputLabel, Select, MenuItem, Button, FormLabel, FormGroup, FormControlLabel, Checkbox } from "@mui/material"
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
+import axios from "axios"
 
 const Editar = () => {
 
-    const {id} = useParams()
+    let { id } = useParams()
+    const navigate = useNavigate()
 
-    const professores = [
-        {id: 0,nome: "Kaynan Cavalo", curso: "CC", titulacao: "GRAD", ai : {es:false,al:false,ds:false,mc:false}},
-        {id: 1,nome: "Thigas", curso: "EC", titulacao: "MEST", ai : {es:false,al:false,ds:false,mc:false}},
-        {id: 2,nome: "Titilio", curso: "CC", titulacao: "DOUT", ai : {es:false,al:false,ds:false,mc:false}},
-        {id: 3,nome: "Vivi", curso: "CC", titulacao: "DOUT", ai : {es:false,al:false,ds:false,mc:false}},
-    ]
+    // const professores = [
+    //     { id: 0,nome: "Kaynan Cavalo", curso: "CC", titulacao: "GRAD", ai:{cg:true,mc:false,al:false,es:true}},
+    //     { id: 1,nome: "Thigas", curso: "EC", titulacao: "MEST", ai:{cg:false,mc:true,al:false,es:false} },
+    //     { id: 2,nome: "Titilio", curso: "CC", titulacao: "DOUT", ai:{cg:true,mc:false,al:true,es:false} },
+    //     { id: 3,nome: "Vivi", curso: "CC", titulacao: "DOUT", ai:{cg:false,mc:true,al:false,es:false} },
+    //     { id: 4,nome: "wladmir", curso: "SI", titulacao: "MEST", ai:{cg:false,mc:true,al:true,es:false} }
+    // ]
 
-    function getProfessorByid(id){
-        return professores.find(professor => professor.id === id)
-    }
-    
+    // function getProfessorById(id) {
+    //     for(let i=0;i<professores.length;i++)
+    //         if(id == professores[i].id) return professores[i]
+    //     return null
+    // }
 
-    const [nome, setNome] = useState("")
-    const [curso, setCurso] = useState("")
-    const [titulacao, setTitulacao] = useState("")
-    const [ai,setAi] = useState({es:false,al:false,ds:false,mc:false})
-    
-    const {es,al,ds,mc} = ai
+    const [nome,setNome] = useState("") //textfield
+    const [curso,setCurso] = useState("") //textfield
+    const [titulacao,setTitulacao] = useState("GRAD") //select
+    const [ai,setAi] = useState({cg:false,mc:false,al:false,es:false}) //checkbox
+    let { cg, mc, al, es} = ai
 
-    // como o [] está vaio, o useEffect executa como constructor
-    // useEffect(() => {
-    //     let professor = getProfessorByid(id)
-    //     setAi(professor.ai)
-    //     setNome(professor.nome)
-    //     setCurso(professor.curso)
-    //     setTitulacao(professor.titulacao)
-    // }, [])
-
+    //como [] está vazio, o useEffect funciona como um construtor!
+    useEffect(
+       ()=>{
+            axios.get(`http://localhost:3001/professores/recuperar/${id}`).
+            then(response => {
+                setNome(response.data.nome)
+                setCurso(response.data.curso)
+                setTitulacao(response.data.titulacao)
+                setAi(response.data.ai)
+            }).catch(error => {console.log(error)})
+       }
+       ,
+       [] 
+    )
 
     function handleSubmit(event) {
         event.preventDefault()
-        console.log(nome)
-        console.log(curso)
-        console.log(titulacao)
-        console.log(ai)
+        const professor = {nome,curso,titulacao,ai}
+        axios.put(`http://localhost:3001/professores/atualizar/${id}`,professor)
+        .then((response)=>{
+            navigate("/listarProfessor")
+        })
+        .catch(error=>console.log(error))
     }
 
     function handleCheckbox(event){
         setAi({
             ...ai,
-            [event.target.name]:event.target.checked,
+            [event.target.name]: event.target.checked 
         })
     }
 
@@ -56,36 +66,43 @@ const Editar = () => {
                 Editar Professor {id}
             </Typography>
             <Box
+                sx={{width:"80%"}}
                 component="form"
                 onSubmit={handleSubmit}
             >
-                <TextField
-                    margin="normal"
+                <TextField 
                     required
                     fullWidth
+                    autoFocus
+                    margin="normal"
+                    label="Nome Completo"
+                    value={nome}
+
                     id="nome"
                     name="nome"
-                    label="Nome Completo"
-                    autoFocus
-                    onChange={(event) => setNome(event.target.value)}
+                    onChange={(event)=>setNome(event.target.value)}
+                    
                 />
-                <TextField
-                    margin="normal"
+                <TextField 
                     required
                     fullWidth
+                    margin="normal"
+                    label="Curso"
+                    value={curso}
+
                     id="curso"
                     name="curso"
-                    label="Curso"
-                    onChange={(event) => setCurso(event.target.value)}
+                    onChange={(event)=>setCurso(event.target.value)}
+                    
                 />
 
-                <FormControl fullWidth sx={{ mt: 2 }}>
+                <FormControl sx={{marginTop:2, width:"100%"}} required>
                     <InputLabel id="select-tit-label">Titulação</InputLabel>
                     <Select
                         labelId="select-tit-label"
                         label="Titulação"
                         value={titulacao}
-                        onChange={(event) => setTitulacao(event.target.value)}
+                        onChange={(event)=>setTitulacao(event.target.value)}
                     >
                         <MenuItem value="GRAD">Graduação</MenuItem>
                         <MenuItem value="MEST">Mestrado</MenuItem>
@@ -93,35 +110,24 @@ const Editar = () => {
                     </Select>
                 </FormControl>
 
-                <FormControl
-                    component="fieldset"
-                    variant="standard"
-                    sx={{ mt: 2, ml: 2 }}
-                >
-                    <FormLabel
-                        component="legend"
-                        sx={{ fontSize: 12, mb: 2 }}
-                    >
-                        Áreas de Interesse
-                    </FormLabel>
+                <FormControl sx={{mt:2,ml:2}} component="fieldset" variant="standard">
+                    <FormLabel component="legend" sx={{fontSize:12,mb:2}}>Áreas de Interesse</FormLabel>
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox checked={es} name="es" onChange={handleCheckbox}/>} label="Engenharia de Software" />
-                        <FormControlLabel control={<Checkbox checked={al} name="al" onChange={handleCheckbox}/>} label="Algoritmos" />
-                        <FormControlLabel control={<Checkbox checked={ds} name="ds" onChange={handleCheckbox}/>} label="Desenvolvimento de Software" />
-                        <FormControlLabel control={<Checkbox checked={mc} name="mc" onChange={handleCheckbox}/>} label="Matemática Computacional" />
+                        <FormControlLabel control={<Checkbox checked={cg} name="cg" onClick={handleCheckbox} />} label="Computação Gráfica" />
+                        <FormControlLabel control={<Checkbox checked={mc} name="mc" onClick={handleCheckbox}/>} label="Matemática Computacional" />
+                        <FormControlLabel control={<Checkbox checked={al} name="al" onClick={handleCheckbox}/>} label="Algoritmos" />
+                        <FormControlLabel control={<Checkbox checked={es} name="es" onClick={handleCheckbox}/>} label="Engenharia de Software"/>
                     </FormGroup>
                 </FormControl>
 
-                <Box sx={{display:"flex",justifyContent:"center"}}>
+                <Box sx={{display:"flex",justifyContent:"center",mt:2,mb:2}}>
                     <Button
-                        type="submit"
                         variant="contained"
-                        sx={{ my: 3 }}
+                        type="submit"
                     >
                         Atualizar
                     </Button>
                 </Box>
-
             </Box>
         </>
     )
