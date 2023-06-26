@@ -4,6 +4,8 @@ import { tableCellClasses } from '@mui/material/TableCell'
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -29,13 +31,35 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const Listar = () => {
 
-    const Alunos = [
-        { id: 0, nome: "Guilherme", curso: "SI", IRA: 9.5 },
-        { id: 1, nome: "Pedro", curso: "DD", IRA: 8.3 },
-        { id: 2, nome: "Fátima", curso: "CC", IRA: 8.2 },
-        { id: 3, nome: "Lucas", curso: "SI", IRA: 7.1 },
-        { id: 4, nome: "Betania", curso: "SI", IRA: 9.2 }
-    ]
+   const [alunos, setAlunos] = useState([])
+
+   useEffect(
+    ()=>{
+        axios.get("http://localhost:3001/alunos/listar")
+        .then(
+            (response)=>{
+                //console.log(response)
+                setAlunos(response.data)
+            }
+        )
+        .catch(error=>console.log(error))
+    }
+    ,
+    []
+    )
+
+    function deleteAlunoById(id) {
+        if(window.confirm("Deseja Excluir ? " + id)){
+            //alert("Professor " + id + " excluído com sucesso!")
+            axios.delete(`http://localhost:3001/alunos/remover/${id}`)
+            .then((response)=>{
+                const resultado = alunos.filter(alu => alu._id != id)
+                setAlunos(resultado)
+            })
+            .catch(error=>console.log(error))
+        }
+    }
+
 
     return (
         <>
@@ -57,17 +81,17 @@ const Listar = () => {
 
                     <TableBody>
                         {
-                            Alunos.map(
+                            alunos.map(
                                 (aluno) => {
                                     return (
-                                        <StyledTableRow key={aluno.id}>
-                                            <StyledTableCell>{aluno.id}</StyledTableCell>
+                                        <StyledTableRow key={aluno._id}>
+                                            <StyledTableCell>{aluno._id}</StyledTableCell>
                                             <StyledTableCell>{aluno.nome}</StyledTableCell>
                                             <StyledTableCell>{aluno.curso}</StyledTableCell>
-                                            <StyledTableCell>{aluno.IRA}</StyledTableCell>
+                                            <StyledTableCell>{aluno.ira}</StyledTableCell>
                                             <StyledTableCell>
                                                 <Box sx={{display:"flex",justifyContent:"center"}}>
-                                                    <IconButton aria-label="delete" color="error">
+                                                    <IconButton aria-label="delete" color="error" onClick={()=>deleteAlunoById(aluno._id)}>
                                                         <DeleteIcon />
                                                     </IconButton>
                                                     <IconButton 
@@ -75,7 +99,7 @@ const Listar = () => {
                                                         color="primary" 
                                                         sx={{ ml: 2 }}
                                                         component={Link}
-                                                        to={`/editarAluno/${aluno.id}`}
+                                                        to={`/editarAluno/${aluno._id}`}
                                                     >
                                                         <EditIcon />
                                                     </IconButton>

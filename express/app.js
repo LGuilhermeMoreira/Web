@@ -11,7 +11,9 @@ require("./db/mongo.connections")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ProfessorRoute = require('./routes/professores');
-const ProfessorService = require('./services/professor.service');
+const ProfessorService = require('./services/professor.service.mongo');
+var AlunoRoute = require('./routes/alunos');
+const AlunoService = require('./services/aluno.service.mongo');
 
 var app = express();
 
@@ -35,6 +37,7 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/professores", ProfessorRoute);
+app.use("/alunos", AlunoRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

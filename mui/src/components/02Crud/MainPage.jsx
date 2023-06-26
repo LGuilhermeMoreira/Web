@@ -22,7 +22,7 @@ const MainPage = () => {
                     {/*Rostas alunos */}
                     <Route path="CadastrarAluno" element={<CadastrarAluno />}/>
                     <Route path="listarAluno" element={<ListarAluno />}/>
-                    <Route path="editarProfessor" element={<EditarAluno />}/>
+                    <Route path="editarAluno" element={<EditarAluno />}/>
                     
                 </Routes>
             </Container>
