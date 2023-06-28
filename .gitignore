@@ -1,0 +1,7 @@
+#database
+/express/db
+
+#node modules
+/express/node_modules
+/mui/node_modules
+/Provas/prova_ap2/node_modules
