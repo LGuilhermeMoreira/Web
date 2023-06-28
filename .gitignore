@@ -1,5 +1,5 @@
 #database
-/express/db/mongo.connection.js
+/express/db/
 
 #node modules
 /express/node_modules/
