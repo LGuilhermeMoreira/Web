@@ -20,7 +20,7 @@ router.put('/atualizar/:id', (req, res, next) => {
 });
 
 router.delete('/remover/:id', (req, res, next) => {
-    alunoServiceMongo.remove(req, res);
+    alunoServiceMongo.delete(req, res);
 })
 
 module.exports = router;

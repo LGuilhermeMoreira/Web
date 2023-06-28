@@ -8,6 +8,7 @@ import EditarProfessor from "./professor/Editar"
 import CadastrarAluno from "./aluno/Cadastrar"
 import ListarAluno from "./aluno/Listar"
 import EditarAluno from "./aluno/Editar"
+import ListarAlunoMaiorMedia from "./aluno/ListarMaiorMedia"
 
 const MainPage = () => {
     return (
@@ -23,6 +24,7 @@ const MainPage = () => {
                     <Route path="CadastrarAluno" element={<CadastrarAluno />}/>
                     <Route path="listarAluno" element={<ListarAluno />}/>
                     <Route path="editarAluno/:id" element={<EditarAluno />}/>
+                    <Route path="AlunosMaiorMedia" element={<ListarAlunoMaiorMedia />}/>
                     
                 </Routes>
             </Container>

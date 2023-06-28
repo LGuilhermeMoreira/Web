@@ -29,7 +29,7 @@ class AlunoService{
     }
 
     static update(request, response){
-        ProfessorModel.findByIdAndUpdate(
+        AlunoModel.findByIdAndUpdate(
             request.params.id,
             request.body,
             {"new":true})

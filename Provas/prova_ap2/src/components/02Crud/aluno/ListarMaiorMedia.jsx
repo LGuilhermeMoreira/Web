@@ -39,6 +39,15 @@ const Listar = () => {
         .then(
             (response)=>{
                 //console.log(response)
+
+                // let listaAlunoMaiorMedia = []
+                // for(let i=0;i<response.data.length;i++){
+                //     if(response.data[i].ira > media())
+                //         listaAlunoMaiorMedia.push(response.data[i])
+                // }
+                //setAlunos(response.data.filter(aluno => aluno.ira > media()))
+
+                //* Carregando todos os alunos
                 setAlunos(response.data)
             }
         )
@@ -67,24 +76,23 @@ const Listar = () => {
         return soma/alunos.length
     }
 
-    let id = 0;
-
+    let id = 0
 
     return (
         <>
             <Typography variant="h5" fontWeight="bold">
-                Listar alunos
+                Alunos com média acima da média geral
             </Typography>
             <TableContainer component={Paper} sx={{ mt: 2, mb: 4 }}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
 
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>ID</StyledTableCell>
+                            
                             <StyledTableCell>NOME</StyledTableCell>
                             <StyledTableCell>CURSO</StyledTableCell>
                             <StyledTableCell>IRA</StyledTableCell>
-                            <StyledTableCell align="center">AÇÕES</StyledTableCell>
+                            
                         </TableRow>
                     </TableHead>
 
@@ -93,42 +101,27 @@ const Listar = () => {
                             alunos.map(
                                 (aluno) => {
                                     id++
-                                    return (
-                                        <StyledTableRow key={aluno._id}>
-                                            <StyledTableCell>{id}</StyledTableCell>
-                                            <StyledTableCell>{aluno.nome}</StyledTableCell>
-                                            <StyledTableCell>{aluno.curso}</StyledTableCell>
-                                            <StyledTableCell>{aluno.ira}</StyledTableCell>
-                                            <StyledTableCell>
-                                                <Box sx={{display:"flex",justifyContent:"center"}}>
-                                                    <IconButton aria-label="delete" color="error" onClick={()=>deleteAlunoById(aluno._id)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    <IconButton 
-                                                        aria-label="edit" 
-                                                        color="primary" 
-                                                        sx={{ ml: 2 }}
-                                                        component={Link}
-                                                        to={`/editarAluno/${aluno._id}`}
-                                                    >
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </Box>
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    )
+                                    
+                                       if(aluno.ira > media()){
+                                        return (
+                                            <StyledTableRow key={id}>
+                                                
+                                                <StyledTableCell>{aluno.nome}</StyledTableCell>
+                                                <StyledTableCell>{aluno.curso}</StyledTableCell>
+                                                <StyledTableCell>{aluno.ira}</StyledTableCell>
+                                                
+                                            </StyledTableRow>
+                                        )
+                                    }
                                 }
+                                
                             )
 
                         }
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box>
-                <Typography variant="h6" fontWeight="bold">
-                    Média dos IRAs: {media().toFixed(2)}
-                </Typography>
-            </Box>
+        
         </>
     )
 }
